@@ -10,6 +10,9 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 
+@api_view(["GET"])
+def index(request):
+    return HttpResponse("Hello, world. You're at the tasks index.")
 
 @api_view(["GET"])
 def getList(request):
@@ -22,7 +25,7 @@ def createTask(request):
     serializer = TaskSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully created.'}))
         
     return Response(serializer.errors, status=status.HTTP_404_BAD_REQUEST)
 
@@ -35,14 +38,14 @@ def updateTask(request, pk):
     serializer = TaskSerializer(task, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
+        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully updated.'}))
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["DELETE"])
-def delete_all(request):
+def delete_all(request, task_id):
     try:
-        task = Task.objects.all()
+        task = Task.objects.get(pk=task_id)
         task.delete()
-        return HttpResponse("task deleted", content_type="application/json")
+        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully deleted.'}))
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
