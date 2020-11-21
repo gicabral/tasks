@@ -10,6 +10,7 @@ from tasks.serializer import TaskSerializer
 
 # Create your views here.
 
+
 class TaskCreate(generics.CreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -17,12 +18,11 @@ class TaskCreate(generics.CreateAPIView):
 class TaskList(generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-     _json = serializers.serialize("json", queryset)
 
 class TaskUpdate(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+    serializer_class = TaskSerializer   
 
 class TaskDelete(generics.DestroyAPIView):
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer 
+    serializer_class = TaskSerializer   
