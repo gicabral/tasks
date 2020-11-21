@@ -13,13 +13,11 @@ def index(request):
     return HttpResponse("Hello, world. You're at the tasks index.")
 
 class TaskCreate(generics.CreateAPIView):
-    data = JSONParser().parse(request)
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer(data=data)
+    serializer_class = TaskSerializer
     def create(request):
-        if serializer_class.is_valid():
-            return JsonResponse(taskSerializer.data, status=201)
-        return JsonResponse(taskSerializer.errors, status=400)
+        data = json.loads(request.body)
+        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully created.', 'Id': task.pk}))
         
 class TaskList(generics.ListAPIView):
     queryset = Task.objects.all()
