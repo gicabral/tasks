@@ -15,22 +15,22 @@ def index(request):
     return HttpResponse("Hello, world. You're at the tasks index.")
 
 @api_view(["GET"])
-def getList(request):
+def listar(request):
     task = Task.objects.all()
-    SomeModel_json = serializers.serialize("json", task)
-    return HttpResponse(SomeModel_json, content_type="application/json")
+    task_json = serializers.serialize("json", task)
+    return HttpResponse(task_json, content_type="application/json")
 
 @api_view(["POST"])
-def createTask(request):
+def adicionar(request):
     serializer = TaskSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully created.'}))
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
         
     return Response(serializer.errors, status=status.HTTP_404_BAD_REQUEST)
 
 @api_view(["PUT"])
-def updateTask(request, pk):
+def atualizar(request, pk):
     try:
         task = Task.objects.get(pk = pk)
     except Task.DoesNotExist:
@@ -38,13 +38,13 @@ def updateTask(request, pk):
     serializer = TaskSerializer(task, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully updated.'}))
+        return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["DELETE"])
-def delete_all(request, task_id):
+def deletar(request, pk):
     try:
-        task = Task.objects.get(pk=task_id)
+        task = Task.objects.get(pk=pk)
         task.delete()
         return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully deleted.'}))
     except:
