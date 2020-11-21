@@ -16,8 +16,7 @@ class TaskCreate(generics.CreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     def create(request):
-        data = json.loads(request.body)
-        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully created.', 'Id': task.pk}))
+        return HttpResponse(json.dumps({'Status': 'Success', 'Message': 'Task successfully created.', 'Id': queryset.pk}))
         
 class TaskList(generics.ListAPIView):
     queryset = Task.objects.all()
