@@ -9,7 +9,8 @@ from tasks.serializer import TaskSerializer
 
 
 # Create your views here.
-
+def index(request):
+    return HttpResponse("Hello, world. You're at the tasks index.")
 
 class TaskCreate(generics.CreateAPIView):
     queryset = Task.objects.all()
